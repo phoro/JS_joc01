@@ -6,11 +6,11 @@ class Personatge {
         this.vida = 1; //vida base
         this.atac = 1; //dany base
         this.defensa = 1; //escut
-        this.destresa = 1; //capacitat d'aprofitar el dany base en % 
+        this.destresa = 1; //capacitat d'aprofitar el dany base. Multiplicador. 
         this.agilitat = 1; // capacitat d'esquivar cops
         this.contratac = 1; // dany base de contraatac
-        this.avatar = "img\personatges\person_1769656.jpg";
-        this.sound= "";
+        this.avatar = "img\personatges\person_1769656.jpg";// imatge representativa
+        this.sound= "";// so associat a la trobada
     }
 
     getInfo() {
@@ -25,12 +25,14 @@ class Personatge {
 }
 
 class Jugador extends Personatge {
-    constructor(nom, vida, atac, defensa, destresa) {
+    constructor(nom, vida, atac, defensa, destresa, avatar, maxvida) {
         super(nom);
+        this.maxvida = super.getmaxvida() * maxvida;
         this.vida = super.getVida() * vida;
         this.atac = super.getAtac() * atac;
         this.defensa = super.getDefensa() * defensa;
         this.destresa = super.getDestresa() * destresa;
+        this.avatar = avatar;
     }
 }
 

@@ -53,7 +53,7 @@ function inicialitza() {
 /*CREAR PERSONATGES*/
 
 function creaProtagonista() {
-    var nom = ""; vida = 1; atac = 1; defensa = 1; destresa = 1; avatar = "img\personatges\person_1769656.jpg";
+    var nom = ""; vida = 1; atac = 1; defensa = 1; destresa = 1; maxvida = 1; avatar = "img\personatges\person_1769656.jpg";
     if (inputRol.checked) {
         nom = "Mandarina";
         vida = 101;
@@ -61,6 +61,7 @@ function creaProtagonista() {
         defensa = 1;
         destresa = 2;
         avatar = "img/personatges/mandarina.jpg";
+        maxvida = 100;
         imatge_protagonista.src = avatar;
     } else {
         nom = "Horno"
@@ -69,9 +70,10 @@ function creaProtagonista() {
         defensa = 2;
         destresa = 1
         avatar = "img/personatges/horno.jpg";
+        maxvida = 130;
         imatge_protagonista.src = avatar;
     }
-    persona = new Jugador(nom, vida, atac, defensa, destresa, avatar);
+    persona = new Jugador(nom, vida, atac, defensa, destresa, avatar, maxvida);
     isJugador = true;
     panell_persona.innerHTML = persona.getInfo();
     mostraVidaProta();
@@ -84,7 +86,7 @@ function creaMosca() {
     parraf_sortida.innerHTML = "Et trobes una mosca. És al teu davant";
     imatge_npc.src = enemic.avatar;
     mostraVidaEnemic();
-    
+
 }
 
 function creaLlop() {
@@ -95,6 +97,7 @@ function creaLlop() {
     if (this.num_llops < 2) {
         parraf_sortida.innerHTML = "Veus un llop uns metres més enllà. Et mira...";
         imatge_npc.src = enemic.avatar;
+        sona("audio/nature026.mp3");
     } else if (this.num_llops === 2) {
         parraf_sortida.innerHTML = "Tornes a trobar-te el mateix llop. Et segueix?";
         sona(this.enemic.sound);
@@ -109,7 +112,7 @@ function creaLlop() {
 function creaOs() {
     enemic = new Os();
     num_ossos++;
-    panell_enemic.innerHTML =enemic.getInfo();
+    panell_enemic.innerHTML = enemic.getInfo();
     sona(this.enemic.sound);
     if (this.num_ossos < 2) {
         parraf_sortida.innerHTML = "Et trobes un gran ós.";
@@ -154,8 +157,9 @@ function deshabilitaInici() {
 
 function iniciPartida() {
     creaProtagonista();
-    deshabilitaInici()
+    deshabilitaInici();
     this.audio.play();
+    imatge_npc.src = "img/ruido.gif";
 
     imatge_lloc.src = pais_actual.paisatges[0];
     imatge_mapa.src = pais_actual.mapes[0];
@@ -168,25 +172,28 @@ function iniciPartida() {
 /* MECÀNIQUES */
 
 function ataca(atacant, atacat) {
-    modeBatalla(true);
+
 
     //atac
     var cop = Math.floor(Math.random() * atacant.atac + 1);
     var dany = cop * atacant.destresa;
     atacat.vida = atacat.vida - dany;
-    console.log("dany: " + dany + "persona: " + persona.vida + "enemic: " + enemic.vida);
+    console.log("dany: " + dany + "\npersona: " + persona.vida + " enemic: " + enemic.vida);
 
     // vista
     panell_persona.innerHTML = persona.getInfo();
     panell_enemic.innerHTML = enemic.getInfo();
     mostraVidaProta();
     mostraVidaEnemic();
+    modeBatalla(true);
     return dany;
 }
 function ataco() {
 
     parraf_sortida.innerHTML = "El cop produeix " + ataca(this.persona, this.enemic) + " danys a " + enemic.nom + ".";
-    if (enemic.vida <= 0) {
+    modeNoaccions(true);
+    sona("audio/jab.mp3");
+    if (enemic.vida <= 0) { //mor
         parraf_sortida.innerHTML = enemic.nom + " ha mort."
         if (enemic.nom === "el llop") {
             num_llops = 0;
@@ -194,15 +201,16 @@ function ataco() {
             num_ossos = 0;
         }
         modeBatalla(false);
-    } else {
+    } else { // contra ataca
         setTimeout(function () {
+            sona("audio/dogbite.mp3");
             parraf_sortida.innerHTML = enemic.nom + " mossega i et fa " + ataca(this.enemic, this.persona) + " danys.";
         }, 3000);
 
     }
+
 }
 function juga() {
-    //sona("audio/hard_shoes.wav");
     this.torn++;
     let queden = 10 - this.torn;
     if (this.torn < 10) {
@@ -215,7 +223,7 @@ function juga() {
         sona("audio/Car Driving.mp3");
         panell_enemic.innerHTML = "has arribat al refugi!!";
         parraf_sortida.innerHTML = "què passarà a partir d'ara?";
-        meter_enemic.hidden=true;
+        meter_enemic.hidden = true;
         imatge_lloc.src = pais_actual.paisatges[5];
         imatge_npc.src = pais_actual.paisatges[5];
 
@@ -232,7 +240,7 @@ function juga() {
 function creaEvent() {
     var opcions = 4;
     var num = Math.floor(Math.random() * opcions + 1);
-    //num = 2;//<------
+    num = 2;//<------
     //console.log(num);
     switch (num) {
         case 1:
@@ -275,24 +283,32 @@ function modeBatalla(mode) {
         boto_fugir.disabled = true;
     }
 }
+function modeNoaccions(mode) {
+    if (mode) {
+        boto_juga.disabled = true;
+        boto_atac.disabled = true;
+        boto_fugir.disabled = true;
+
+    }
+}
 
 function mostraVidaProta() {
     this.meter_prota.hidden = false;
-    this.meter_prota.max=this.persona.maxvida;
-    this.meter_prota.low=this.persona.maxvida*0.4;
-    this.meter_prota.high=this.persona.maxvida*0.9;
-    this.meter_prota.optimum=this.persona.maxvida;
+    this.meter_prota.max = this.persona.maxvida;
+    this.meter_prota.low = this.persona.maxvida * 0.4;
+    this.meter_prota.high = this.persona.maxvida * 0.9;
+    this.meter_prota.optimum = this.persona.maxvida;
     this.meter_prota.value = this.persona.vida;
 }
 function mostraVidaEnemic() {
     this.meter_enemic.hidden = false;
-    this.meter_enemic.max=this.enemic.maxvida;
-    this.meter_enemic.low=this.enemic.maxvida*0.4;
-    this.meter_enemic.high=this.enemic.maxvida*0.9;
-    this.meter_enemic.optimum=this.enemic.maxvida;
+    this.meter_enemic.max = this.enemic.maxvida;
+    this.meter_enemic.low = this.enemic.maxvida * 0.4;
+    this.meter_enemic.high = this.enemic.maxvida * 0.9;
+    this.meter_enemic.optimum = this.enemic.maxvida;
     this.meter_enemic.value = this.enemic.vida;
 }
-function sona(src){
-    this.audio.src=src;
+function sona(src) {
+    this.audio.src = src;
     this.audio.play();
 }

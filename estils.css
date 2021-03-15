@@ -36,16 +36,21 @@ button:disabled {
 img {
     margin-left: 0.5em;
 }
-meter{
+
+meter {
     margin-left: 2em;
+}
+sup{
+    font-size: 0.7em;  
 }
 
 .menus {
     padding-top: 2em;
     margin-left: 3em;
 }
+
 .accions {
-    clear:left;
+    clear: left;
     float: left;
     padding-bottom: 2em;
     margin-left: 3em;
@@ -61,7 +66,7 @@ meter{
     margin-bottom: 2em;
     margin-left: 2em;
     border-radius: 2em;
-    background-color:#2F4F4F;
+    background-color: #2F4F4F;
     text-align: left;
     font-family: verdana;
     font-size: 1rem;
@@ -82,7 +87,7 @@ meter{
 
 .torns {
     float: left;
-    color: grey;
+    color: wheat;
     padding: 1em 1em 1em 1em;
     margin-left: 2em;
     border-radius: 1em;
@@ -101,22 +106,34 @@ meter{
 }
 
 .prota {
-    height: 200px;
-    width: 200px;
+    height: 190px;
+    width: 190px;
     margin-left: 1.8em;
     border-style: solid;
     border-color: gray;
     border: -0.1em;
     border-radius: 1em;
 }
+
 .npc {
-    height: 200px;
-    width: 300px;
+    height: 190px;
+    width: 285px;
+    margin-left: 1em;
     border-style: solid;
     border-color: gray;
     border: -0.1em;
     border-radius: 1em;
 }
-#audio{
+
+
+#audio {
     display: none
-    }
+}
+
+#titol {
+    clear:left;
+    float: left;
+    color:grey;
+    font-size: 1.1em;
+    font-family: monospace;
+}
