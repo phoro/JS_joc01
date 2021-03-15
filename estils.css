@@ -36,6 +36,9 @@ button:disabled {
 img {
     margin-left: 0.5em;
 }
+meter{
+    margin-left: 2em;
+}
 
 .menus {
     padding-top: 2em;
@@ -114,3 +117,6 @@ img {
     border: -0.1em;
     border-radius: 1em;
 }
+#audio{
+    display: none
+    }

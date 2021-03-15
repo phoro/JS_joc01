@@ -24,6 +24,9 @@ var imatge_mapa = document.getElementById("mapa");
 var imatge_lloc = document.getElementById("lloc");
 var imatge_protagonista = document.getElementById("prota");
 var imatge_npc = document.getElementById("npc");
+var meter_prota = document.getElementById("meterprota");
+var meter_enemic = document.getElementById("meterenemic");
+var audio = document.getElementById("audio");
 
 inicialitza();
 
@@ -33,6 +36,8 @@ function inicialitza() {
     boto_fugir.hidden = true;
     boto_sigil.hidden = true;
     boto_juga.disabled = true;
+    meter_prota.hidden = true;
+    meter_enemic.hidden = true;
     num_llops = 0;
     num_ossos = 0;
 
@@ -69,48 +74,61 @@ function creaProtagonista() {
     persona = new Jugador(nom, vida, atac, defensa, destresa, avatar);
     isJugador = true;
     panell_persona.innerHTML = persona.getInfo();
+    mostraVidaProta();
 }
 
 function creaMosca() {
-    let mosca = new Mosca();
-    panell_enemic.innerHTML = mosca.getInfo()
+    enemic = new Mosca();
+    panell_enemic.innerHTML = enemic.getInfo();
+    sona(this.enemic.sound);
     parraf_sortida.innerHTML = "Et trobes una mosca. És al teu davant";
-    imatge_npc.src = mosca.avatar;
+    imatge_npc.src = enemic.avatar;
+    mostraVidaEnemic();
+    
 }
 
 function creaLlop() {
     enemic = new Llop();
     num_llops++;
     panell_enemic.innerHTML = enemic.getInfo();
+
     if (this.num_llops < 2) {
         parraf_sortida.innerHTML = "Veus un llop uns metres més enllà. Et mira...";
         imatge_npc.src = enemic.avatar;
     } else if (this.num_llops === 2) {
         parraf_sortida.innerHTML = "Tornes a trobar-te el mateix llop. Et segueix?";
+        sona(this.enemic.sound);
         imatge_npc.src = enemic.avatar;
     } else {
-
         imatge_npc.src = "img/personatges/llop2.jpg";
         parraf_sortida.innerHTML = "El llop ataca! Et produeix " + ataca(enemic, persona) + " danys.";
+        sona("audio/WolfGrowlingFiercely.mp3");
     }
-
+    mostraVidaEnemic();
 }
 function creaOs() {
-    let os = new Os();
+    enemic = new Os();
     num_ossos++;
-    panell_enemic.innerHTML = os.getInfo();
+    panell_enemic.innerHTML =enemic.getInfo();
+    sona(this.enemic.sound);
     if (this.num_ossos < 2) {
         parraf_sortida.innerHTML = "Et trobes un gran ós.";
     } else {
         parraf_sortida.innerHTML = "Trobes unaltre ós.";
     }
 
-    imatge_npc.src = os.avatar;
+    imatge_npc.src = enemic.avatar;
+    mostraVidaEnemic();
 
 }
 function creaNores() {
+    sona("audio/rainforest_ambience.mp3");
+    panell_enemic.innerHTML = "";
     parraf_sortida.innerHTML = "Passes un dia tranquil.";
     imatge_npc.src = imatge_lloc.src;
+
+    this.meter_enemic.hidden = true;
+
 }
 
 /* CREAR PAÏSOS */
@@ -131,11 +149,13 @@ function deshabilitaInici() {
     boto_inici.disabled = true;
     blocInici.style.display = "none";
     boto_juga.disabled = false;
+    meter_prota.hidden = false;
 }
 
 function iniciPartida() {
     creaProtagonista();
     deshabilitaInici()
+    this.audio.play();
 
     imatge_lloc.src = pais_actual.paisatges[0];
     imatge_mapa.src = pais_actual.mapes[0];
@@ -159,6 +179,8 @@ function ataca(atacant, atacat) {
     // vista
     panell_persona.innerHTML = persona.getInfo();
     panell_enemic.innerHTML = enemic.getInfo();
+    mostraVidaProta();
+    mostraVidaEnemic();
     return dany;
 }
 function ataco() {
@@ -172,15 +194,15 @@ function ataco() {
             num_ossos = 0;
         }
         modeBatalla(false);
-    } else{
-        setTimeout(function(){
-            //do what you need here
-            parraf_sortida.innerHTML = enemic.nom + " mossega i et fa "+ ataca(this.enemic, this.persona) + " danys.";
+    } else {
+        setTimeout(function () {
+            parraf_sortida.innerHTML = enemic.nom + " mossega i et fa " + ataca(this.enemic, this.persona) + " danys.";
         }, 3000);
-        
+
     }
 }
 function juga() {
+    //sona("audio/hard_shoes.wav");
     this.torn++;
     let queden = 10 - this.torn;
     if (this.torn < 10) {
@@ -190,7 +212,10 @@ function juga() {
         }
         creaEvent();
     } else {
-        parraf_sortida.innerHTML = "has arribat al refugi!!";
+        sona("audio/Car Driving.mp3");
+        panell_enemic.innerHTML = "has arribat al refugi!!";
+        parraf_sortida.innerHTML = "què passarà a partir d'ara?";
+        meter_enemic.hidden=true;
         imatge_lloc.src = pais_actual.paisatges[5];
         imatge_npc.src = pais_actual.paisatges[5];
 
@@ -233,6 +258,7 @@ function creaEvent() {
 }
 
 function fuig() {
+    parraf_sortida.innerHTML = "No pots fugir";
 
 }
 
@@ -248,4 +274,25 @@ function modeBatalla(mode) {
         boto_atac.disabled = true;
         boto_fugir.disabled = true;
     }
+}
+
+function mostraVidaProta() {
+    this.meter_prota.hidden = false;
+    this.meter_prota.max=this.persona.maxvida;
+    this.meter_prota.low=this.persona.maxvida*0.4;
+    this.meter_prota.high=this.persona.maxvida*0.9;
+    this.meter_prota.optimum=this.persona.maxvida;
+    this.meter_prota.value = this.persona.vida;
+}
+function mostraVidaEnemic() {
+    this.meter_enemic.hidden = false;
+    this.meter_enemic.max=this.enemic.maxvida;
+    this.meter_enemic.low=this.enemic.maxvida*0.4;
+    this.meter_enemic.high=this.enemic.maxvida*0.9;
+    this.meter_enemic.optimum=this.enemic.maxvida;
+    this.meter_enemic.value = this.enemic.vida;
+}
+function sona(src){
+    this.audio.src=src;
+    this.audio.play();
 }
