@@ -66,6 +66,22 @@ class Mosca extends Personatge {
         this.sound = "audio/bee.mp3";
     }
 }
+class Papallona extends Personatge {
+    constructor() {
+        super("la papallona");
+        this.avatar = "img/personatges/papallona.jpg";
+        this.sound = "audio/musicbox.mp3";
+        
+    }
+}
+class Forat extends Personatge {
+    constructor() {
+        super("la papallona");
+        this.avatar = "img/personatges/hole.jpg";
+        this.sound = "audio/wind.mp3";
+        
+    }
+}
 /* LOCALITZACIONS */
 class Pais {
     constructor(nom, imatges, mapes) {

@@ -7,6 +7,8 @@ var persona;
 var enemic;
 var num_llops;
 var num_ossos;
+var num_papallones;
+var num_forats;
 
 var boto_inici = document.getElementById("btInici");
 var boto_juga = document.getElementById("btJuga");
@@ -38,8 +40,7 @@ function inicialitza() {
     boto_juga.disabled = true;
     meter_prota.hidden = true;
     meter_enemic.hidden = true;
-    num_llops = 0;
-    num_ossos = 0;
+    num_llops = 0; num_ossos = 0; num_papallones = 0; num_forats = 0;
 
     pais_actual = {
         nom: 'Terra Humida',
@@ -123,6 +124,31 @@ function creaOs() {
     imatge_npc.src = enemic.avatar;
     mostraVidaEnemic();
 
+}
+function creaPapallona() {
+    enemic = new Papallona();
+    num_papallones++;
+    panell_enemic.innerHTML = enemic.getInfo();
+    sona(this.enemic.sound);
+    imatge_npc.src = enemic.avatar;
+    if (this.num_papallones < 2) {
+        parraf_sortida.innerHTML = "una papallona t'explica una història local";
+    } else {
+        parraf_sortida.innerHTML = "La vida és plena!";
+        this.persona.vida = this.persona.maxvida;
+    }
+}
+function creaForat() {
+    enemic = new Forat();
+    num_forats++;
+    panell_enemic.innerHTML = enemic.getInfo();
+    sona(this.enemic.sound);
+    imatge_npc.src = enemic.avatar;
+    if (this.num_papallones < 2) {
+        parraf_sortida.innerHTML = "trobes un forat";
+    } else {
+        parraf_sortida.innerHTML = "El forat és molt profund.";
+    }
 }
 function creaNores() {
     sona("audio/rainforest_ambience.mp3");
@@ -238,9 +264,9 @@ function juga() {
 }
 
 function creaEvent() {
-    var opcions = 4;
+    var opcions = 6;
     var num = Math.floor(Math.random() * opcions + 1);
-    num = 2;//<------
+    //num = 2;//<------
     //console.log(num);
     switch (num) {
         case 1:
@@ -258,6 +284,14 @@ function creaEvent() {
         case 4:
             parraf_sortida.innerHTML = " un ós";
             creaOs();
+            break;
+        case 5:
+            parraf_sortida.innerHTML = " hi ha un forat";
+            creaForat();
+            break;
+        case 6:
+            parraf_sortida.innerHTML = " una papallona t'explica una història local";
+            creaPapallona();
             break;
         default:
             parraf_sortida.innerHTML = "Has avançat uns metres";
