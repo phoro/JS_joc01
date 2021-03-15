@@ -1,0 +1,116 @@
+body {
+    background-color: rgb(17, 17, 17);
+    color: white;
+}
+
+button {
+    text-decoration: none;
+    background-color: #2F4F4F;
+    padding: 1em 1em 1em 1em;
+    color: white;
+    text-transform: uppercase;
+    font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+    font-size: 1em;
+    border: .1em solid white;
+    transition-duration: 0.4s;
+}
+
+p {
+    padding: 0em 0em 0em 2em;
+}
+
+label {
+    padding: 0em 0em 0em 2em;
+}
+
+button:hover {
+    background-color: white;
+    color: teal;
+}
+
+button:disabled {
+    background-color: gray;
+    color: white;
+}
+
+img {
+    margin-left: 0.5em;
+}
+
+.menus {
+    padding-top: 2em;
+    margin-left: 3em;
+}
+.accions {
+    clear:left;
+    float: left;
+    padding-bottom: 2em;
+    margin-left: 3em;
+}
+
+.default {
+    background-color: teal;
+}
+
+.personatge {
+    float: left;
+    margin-top: 2em;
+    margin-bottom: 2em;
+    margin-left: 2em;
+    border-radius: 2em;
+    background-color:#2F4F4F;
+    text-align: left;
+    font-family: verdana;
+    font-size: 1rem;
+    text-transform: uppercase;
+    width: 15em;
+    height: 10em;
+}
+
+.sortida {
+    clear: left;
+    padding: 1em 1em 1em 1em;
+    margin-left: 2em;
+    border-radius: 1em;
+    width: 29.5em;
+    background-color: grey;
+    font-family: Verdana, Geneva, Tahoma, sans-serif
+}
+
+.torns {
+    float: left;
+    color: grey;
+    padding: 1em 1em 1em 1em;
+    margin-left: 2em;
+    border-radius: 1em;
+    width: 29.5em;
+    font-family: Verdana, Geneva, Tahoma, sans-serif
+}
+
+.mapa {
+    margin-left: 2em;
+    width: 500px;
+    height: 300px;
+    border-style: solid;
+    border-color: gray;
+    border: -0.1em;
+    border-radius: 1em;
+}
+
+.prota {
+    height: 200px;
+    width: 200px;
+    margin-left: 1.8em;
+    border-style: solid;
+    border-color: gray;
+    border: -0.1em;
+    border-radius: 1em;
+}
+.npc {
+    height: 200px;
+    width: 300px;
+    border-style: solid;
+    border-color: gray;
+    border: -0.1em;
+    border-radius: 1em;
+}

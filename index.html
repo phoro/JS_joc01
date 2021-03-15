@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="utf-8">
+    <title>JOC 01</title>
+    <link rel="stylesheet" href="estils.css">
+    <script src="js/model.js" defer></script>
+    <script src="js/scripts.js" defer></script>
+</head>
+
+<body>
+    <div>
+        <div class="menus">
+            <button id="btInici" onclick="iniciPartida()">Comença partida</button>
+            <button onclick="creaMosca()" disabled="true">Botó 1</button>
+            <button onclick="creaLlop()" disabled="true">Botó 2</button>
+            <button id="btJuga" onclick="juga()">Juga</button>
+        </div>
+        <div>
+            <div class="personatge">
+                <p id="jugador"></p>
+                <div id="inici">
+                    <p>Selecciona rol:</p>
+                    <label class="radios">
+                        <input type="radio" name="rol" id="mandarina" checked>Mandarina
+                    </label>
+                    <br />
+                    <label class="radios">
+                        <input type="radio" name="rol" id="horno">Horno
+                    </label>
+                </div>
+
+            </div>
+            <div class="personatge">
+                <p id="enemic"></p>
+            </div>
+
+            <div class="accions">
+                <button id="btAtacar" onclick="ataco()">Ataca</button>
+                <button id="btFugir" onclick="fuig()">Fuig</button>
+                <button id="btSigil" onclick="sigil()">Sigil</button>
+            </div>
+            <div>
+                <img id="prota" class="prota" alt="avatar" src="img/ruido.jpg">
+                <img id="npc" class="npc" alt="npc" src="img/ruido.jpg">
+            </div>
+        </div>
+        <div>
+            <p class="sortida" id="sortida">No existeixes. Crea un personatge i comença el viatge.</p>
+            <img id="lloc" class="mapa" alt="paisatge" src="img/ruido.jpg">
+            <img id="mapa" class="mapa" alt="mapa" src="img/ruido.jpg">
+        </div>
+        <div class="torns" id="situacio"></div>
+        <div class="torns" id="torns"></div>
+
+    </div>
+
+</body>
+
+</html>
