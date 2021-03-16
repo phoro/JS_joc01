@@ -41,7 +41,7 @@ class Llop extends Personatge {
         super("el llop");
         this.maxvida = super.getmaxvida() * 20;
         this.vida = super.getVida() * 20;
-        this.atac = super.getAtac() * 6;
+        this.atac = super.getAtac() * 10;
         this.defensa = super.getDefensa() * 3;
         this.avatar = "img/personatges/llop.jpg";
         this.sound = "audio/DogGrowlingAndBarking.mp3"
@@ -52,7 +52,7 @@ class Os extends Personatge {
         super("ós");
         this.maxvida = super.getmaxvida() * 120;
         this.vida = super.getVida() * 120;
-        this.atac = super.getAtac() * 12;
+        this.atac = super.getAtac() * 20;
         this.defensa = super.getDefensa() * 5;
         this.avatar = "img/personatges/os.jpg";
         this.sound = "audio/BearGrowling.mp3";
@@ -71,7 +71,6 @@ class Papallona extends Personatge {
         super("la papallona");
         this.avatar = "img/personatges/papallona.jpg";
         this.sound = "audio/musicbox.mp3";
-        
     }
 }
 class Forat extends Personatge {
@@ -79,9 +78,9 @@ class Forat extends Personatge {
         super("la papallona");
         this.avatar = "img/personatges/hole.jpg";
         this.sound = "audio/wind.mp3";
-        
     }
 }
+
 /* LOCALITZACIONS */
 class Pais {
     constructor(nom, imatges, mapes) {

@@ -5,16 +5,18 @@ var torn = 0;
 var pais_actual;
 var persona;
 var enemic;
+var interacció; // valor per indicar quina interacció 
 var num_llops;
 var num_ossos;
 var num_papallones;
 var num_forats;
+var num_moscas;
 
 var boto_inici = document.getElementById("btInici");
 var boto_juga = document.getElementById("btJuga");
 var boto_atac = document.getElementById("btAtacar");
 var boto_fugir = document.getElementById("btFugir");
-var boto_sigil = document.getElementById("btSigil");
+var boto_mira = document.getElementById("btMirar");
 var panell_persona = document.getElementById("jugador");
 var panell_enemic = document.getElementById("enemic");
 var blocInici = document.getElementById("inici");
@@ -36,11 +38,11 @@ function inicialitza() {
     isJugador = false;
     boto_atac.hidden = true;
     boto_fugir.hidden = true;
-    boto_sigil.hidden = true;
+    boto_mira.hidden = true;
     boto_juga.disabled = true;
     meter_prota.hidden = true;
     meter_enemic.hidden = true;
-    num_llops = 0; num_ossos = 0; num_papallones = 0; num_forats = 0;
+    num_llops = 0; num_ossos = 0; num_papallones = 0; num_forats = 0; num_moscas = 0;
 
     pais_actual = {
         nom: 'Terra Humida',
@@ -81,10 +83,18 @@ function creaProtagonista() {
 }
 
 function creaMosca() {
+    num_moscas++;
     enemic = new Mosca();
     panell_enemic.innerHTML = enemic.getInfo();
     sona(this.enemic.sound);
-    parraf_sortida.innerHTML = "Et trobes una mosca. És al teu davant";
+
+    if (this.num_moscas < 2) {
+        parraf_sortida.innerHTML = "Et trobes una mosca. És al teu davant";
+
+    } else {
+        parraf_sortida.innerHTML = "Hi ha moltes mosques.";
+    }
+
     imatge_npc.src = enemic.avatar;
     mostraVidaEnemic();
 
@@ -110,6 +120,7 @@ function creaLlop() {
     }
     mostraVidaEnemic();
 }
+
 function creaOs() {
     enemic = new Os();
     num_ossos++;
@@ -117,14 +128,16 @@ function creaOs() {
     sona(this.enemic.sound);
     if (this.num_ossos < 2) {
         parraf_sortida.innerHTML = "Et trobes un gran ós.";
-    } else {
+    } else if (this.num_osos === 2) {
         parraf_sortida.innerHTML = "Trobes unaltre ós.";
+    } else {
+        parraf_sortida.innerHTML = "Hi ha molts óssos. És perillós...";
     }
 
     imatge_npc.src = enemic.avatar;
     mostraVidaEnemic();
-
 }
+
 function creaPapallona() {
     enemic = new Papallona();
     num_papallones++;
@@ -132,20 +145,25 @@ function creaPapallona() {
     sona(this.enemic.sound);
     imatge_npc.src = enemic.avatar;
     if (this.num_papallones < 2) {
-        parraf_sortida.innerHTML = "una papallona t'explica una història local";
+        parraf_sortida.innerHTML = "La papallona t'explica que una dona que va marxar en busca d'una vida més desconeguda";
     } else {
         parraf_sortida.innerHTML = "La vida és plena!";
         this.persona.vida = this.persona.maxvida;
     }
 }
+
 function creaForat() {
     enemic = new Forat();
     num_forats++;
     panell_enemic.innerHTML = enemic.getInfo();
     sona(this.enemic.sound);
     imatge_npc.src = enemic.avatar;
-    if (this.num_papallones < 2) {
-        parraf_sortida.innerHTML = "trobes un forat";
+    if (this.num_forats < 2) {
+        parraf_sortida.innerHTML = "Trobes un forat.";
+        interacció = "forat_cerillas";
+        mode('interaccio');
+
+
     } else {
         parraf_sortida.innerHTML = "El forat és molt profund.";
     }
@@ -171,10 +189,10 @@ function creaPais(nom, imatges) {
 function deshabilitaInici() {
     boto_atac.hidden = false;
     boto_fugir.hidden = false;
-    boto_sigil.hidden = false;
+    boto_mira.hidden = false;
     boto_atac.disabled = true;
     boto_fugir.disabled = true;
-    boto_sigil.disabled = true;
+    boto_mira.disabled = true;
     boto_inici.disabled = true;
     blocInici.style.display = "none";
     boto_juga.disabled = false;
@@ -198,8 +216,6 @@ function iniciPartida() {
 /* MECÀNIQUES */
 
 function ataca(atacant, atacat) {
-
-
     //atac
     var cop = Math.floor(Math.random() * atacant.atac + 1);
     var dany = cop * atacant.destresa;
@@ -211,13 +227,13 @@ function ataca(atacant, atacat) {
     panell_enemic.innerHTML = enemic.getInfo();
     mostraVidaProta();
     mostraVidaEnemic();
-    modeBatalla(true);
+    mode('batalla');
     return dany;
 }
 function ataco() {
 
     parraf_sortida.innerHTML = "El cop produeix " + ataca(this.persona, this.enemic) + " danys a " + enemic.nom + ".";
-    modeNoaccions(true);
+    mode('noaccions');
     sona("audio/jab.mp3");
     if (enemic.vida <= 0) { //mor
         parraf_sortida.innerHTML = enemic.nom + " ha mort."
@@ -226,7 +242,7 @@ function ataco() {
         } else if (enemic.nom === "ós") {
             num_ossos = 0;
         }
-        modeBatalla(false);
+        mode('aventura');
     } else { // contra ataca
         setTimeout(function () {
             sona("audio/dogbite.mp3");
@@ -266,7 +282,7 @@ function juga() {
 function creaEvent() {
     var opcions = 6;
     var num = Math.floor(Math.random() * opcions + 1);
-    //num = 2;//<------
+    //num = 2;//<------ llops continus
     //console.log(num);
     switch (num) {
         case 1:
@@ -303,26 +319,48 @@ function fuig() {
     parraf_sortida.innerHTML = "No pots fugir";
 
 }
+function mira() {
+    switch (interacció) {
+        case "forat_cerillas":
+            parraf_sortida.innerHTML = " Una 'caja de cerillas' . Et servirà per fer fotos";
+            break;
+        default:
+            parraf_sortida.innerHTML = " El paisatge és preciós";
+
+            break;
+    }
+    mode('aventura');
+
+}
 
 /* USER INTERFACE */
-function modeBatalla(mode) {
-    if (mode) {
-        boto_juga.disabled = true;
-        boto_atac.disabled = false;
-        boto_fugir.disabled = false;
+function mode(nom) {
+    switch (nom) {
+        case 'batalla':
+            boto_atac.disabled = false;
+            boto_fugir.disabled = false;
+            boto_mira.disabled = true;
+            boto_juga.disabled = true;
+            break;
+        case 'noaccions':
+            boto_atac.disabled = true;
+            boto_fugir.disabled = true;
+            boto_mira.disabled = true;
+            boto_juga.disabled = true;
+            break;
+        case 'interaccio':
+            boto_juga.disabled = true;
+            boto_mira.disabled = false;
+            break;
+        case 'aventura':
+            boto_atac.disabled = true;
+            boto_fugir.disabled = true;
+            boto_mira.disabled = true;
+            boto_juga.disabled = false;
+            break;
+        default:
 
-    } else {
-        boto_juga.disabled = false;
-        boto_atac.disabled = true;
-        boto_fugir.disabled = true;
-    }
-}
-function modeNoaccions(mode) {
-    if (mode) {
-        boto_juga.disabled = true;
-        boto_atac.disabled = true;
-        boto_fugir.disabled = true;
-
+            break;
     }
 }
 
