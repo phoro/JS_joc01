@@ -66,7 +66,7 @@ sup{
     margin-top: 2em;
     margin-bottom: 2em;
     margin-left: 2em;
-    border-radius: 2em;
+    border-radius: 1em;
     background-color: #2F4F4F;
     text-align: left;
     font-family: verdana;
@@ -81,9 +81,11 @@ sup{
     padding: 1em 1em 1em 1em;
     margin-left: 2em;
     border-radius: 1em;
-    width: 29.5em;
+    width: 63.5em;
     background-color: grey;
-    font-family: Verdana, Geneva, Tahoma, sans-serif
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    text-transform: initial;
+    
 }
 
 .torns {
@@ -137,4 +139,5 @@ sup{
     color:grey;
     font-size: 1.1em;
     font-family: monospace;
+    padding-left: 60em;
 }

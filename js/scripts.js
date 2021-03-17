@@ -48,9 +48,7 @@ function inicialitza() {
         nom: 'Terra Humida',
         paisatges: ['img/paisatges/Handpainted_02.jpg', 'img/paisatges/handpainted_07.jpg', 'img/paisatges/Realistic_valley_35.jpg', 'img/paisatges/handpainted_24.jpg', 'img/paisatges/Realistic_Mountains_05.jpg', 'img/paisatges/handpainted_12.jpg'],
         mapes: ['img/mapes/mapa01_0_inici.jpg', 'img/mapes/mapa01_1_.jpg', 'img/mapes/mapa01_2_inici.jpg']
-
     };
-
 }
 
 /*CREAR PERSONATGES*/
@@ -162,8 +160,6 @@ function creaForat() {
         parraf_sortida.innerHTML = "Trobes un forat.";
         interacció = "forat_cerillas";
         mode('interaccio');
-
-
     } else {
         parraf_sortida.innerHTML = "El forat és molt profund.";
     }
@@ -175,7 +171,6 @@ function creaNores() {
     imatge_npc.src = imatge_lloc.src;
 
     this.meter_enemic.hidden = true;
-
 }
 
 /* CREAR PAÏSOS */
@@ -232,7 +227,7 @@ function ataca(atacant, atacat) {
 }
 function ataco() {
 
-    parraf_sortida.innerHTML = "El cop produeix " + ataca(this.persona, this.enemic) + " danys a " + enemic.nom + ".";
+    parraf_sortida.innerHTML = "El cop produeix " + ataca(this.persona, this.enemic) + " punts de dany a " + enemic.nom + ".";
     mode('noaccions');
     sona("audio/jab.mp3");
     if (enemic.vida <= 0) { //mor
@@ -246,7 +241,7 @@ function ataco() {
     } else { // contra ataca
         setTimeout(function () {
             sona("audio/dogbite.mp3");
-            parraf_sortida.innerHTML = enemic.nom + " mossega i et fa " + ataca(this.enemic, this.persona) + " danys.";
+            parraf_sortida.innerHTML = enemic.nom + " mossega i et fa " + ataca(this.enemic, this.persona) + " punts de dany.";
         }, 3000);
 
     }
@@ -359,6 +354,10 @@ function mode(nom) {
             boto_juga.disabled = false;
             break;
         default:
+            boto_atac.disabled = true;
+            boto_fugir.disabled = true;
+            boto_mira.disabled = true;
+            boto_juga.disabled = false;
 
             break;
     }
